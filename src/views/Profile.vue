@@ -2,23 +2,18 @@
   <div>
     <br>
     <br>
-    <div class="avatar">
-      <img
-        src="https://s3-ap-southeast-2.amazonaws.com/gogox-public/system/default_avatar.png"
-        alt="User Logo"
-        class="profile__avatar"
-      >
-    </div>
     <div class="driver">
+      <center>
+        <img :src="'https://s3-ap-southeast-2.amazonaws.com//'+driver.avatar" alt="User Logo">
+      </center>
       <br>
-      <p>Greta</p>
-      <p>0210342868</p>
-    </div>
-    <br>
-    <br>
-    <br>
-    <div class="log-out">
-      <span @click="logout">登出</span>
+      <div>{{driver.legalName}}</div>
+      <div>{{driver.phone}}</div>
+      <br>
+      <br>
+      <div class="log-out">
+        <span @click="logout">ç™»å‡º</span>
+      </div>
     </div>
   </div>
 </template>
@@ -27,25 +22,25 @@
 import store from "@/store.js";
 
 export default {
-  name: "home",
+  name: "Profile",
   store,
 
   data() {
     return {
-      orderList: [],
-      order: this.$store.state.lists,
+      driver: [],
+      //driver: this.$store.state.lists,
       isShow: false,
       current: "",
       chooseOne: ""
     };
   },
   computed: {
-    lists() {
-      return store.state.lists;
-    }
+    // lists() {
+    //   return store.state.lists;
+    // }
   },
   created() {
-    this.getOrderList();
+    // this.getDriverList();
     this.getDriver();
   },
   methods: {
@@ -56,18 +51,18 @@ export default {
     choose(index) {
       this.current = index;
     },
-    async getOrderList() {
-      try {
-        const { data } = await this.$http({
-          url: "https://dev.gogox.co.nz/v1/core/order/driver/orders",
-          params: { driverID: window.localStorage.getItem("userID") },
-          headers: {
-            Authorization: window.localStorage.getItem("accessToken")
-          }
-        });
-        this.orderList = data.data;
-      } catch (error) {}
-    },
+    // async getDriverList() {
+    //   try {
+    //     const { data } = await this.$http({
+    //       url: "https://dev.gogox.co.nz/v1/core/order/driver/orders",
+    //       params: { driverID: window.localStorage.getItem("userID") },
+    //       headers: {
+    //         Authorization: window.localStorage.getItem("accessToken")
+    //       }
+    //     });
+    //     this.driverList = data.data;
+    //   } catch (error) {}
+    // },
     async getDriver() {
       try {
         const { data } = await this.$http({
@@ -78,7 +73,9 @@ export default {
             "X-GOGO-ORIGIN": "driver"
           }
         });
-        console.log(data);
+        //console.log(data);
+        this.driver = data.data;
+        console.log(this.driver.avatar);
       } catch (error) {}
     },
     showInfo(item) {
@@ -94,10 +91,11 @@ export default {
 <style scoped lang="scss">
 $main-color: #0085ff;
 
-.avatar {
-  text-align: center;
-  font-size: 10px;
+img {
+  width: 150px;
+  height: 150px;
 }
+
 .driver {
   text-align: center;
   font-size: 25px;
